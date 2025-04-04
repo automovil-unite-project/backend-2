@@ -1,0 +1,19 @@
+package com.automovil_unite.backend.domain.model;
+
+public enum NotificationType {
+    RENTAL_REQUEST,
+    RENTAL_COUNTER_OFFER,
+    RENTAL_ACCEPTED,
+    RENTAL_REJECTED,
+    RENTAL_CONFIRMED,
+    RENTAL_COMPLETED,
+    RENTAL_CANCELLED,
+    RENTAL_LATE,
+    REVIEW_RECEIVED,
+    REPORT_RECEIVED,
+    DOCUMENT_VERIFIED,
+    DOCUMENT_REJECTED,
+    VEHICLE_VERIFIED,
+    VEHICLE_REJECTED,
+    SYSTEM
+}
