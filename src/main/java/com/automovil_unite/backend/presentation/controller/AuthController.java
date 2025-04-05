@@ -66,9 +66,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDto> login(
-            @Parameter(description = "Credenciales de inicio de sesión", required = true)
-            @Valid @RequestBody LoginRequestDto loginRequest) {
+    public ResponseEntity<TokenResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -78,28 +76,29 @@ public class AuthController {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            
+
             // Obtener el ID de usuario
             UUID userId = UUID.fromString(authentication.getName());
-            
+
             // Verificar si se requiere autenticación de dos factores
             boolean requiresTwoFactor = securityService.requiresTwoFactor(userId);
-            
+
             // Si se requiere 2FA, generar código y enviarlo por correo
             if (requiresTwoFactor) {
+                // ESTE ES EL PUNTO CLAVE - ¿Se está ejecutando esta línea?
                 verificationService.generateCode(userId, VerificationCodeType.LOGIN);
             }
-            
+
             // Generar token JWT
             String token = securityService.generateToken(userId);
-            
+
             TokenResponseDto response = TokenResponseDto.builder()
                     .token(token)
                     .tokenType("Bearer")
                     .expiresIn(3600) // 1 hora
                     .requiresTwoFactor(requiresTwoFactor)
                     .build();
-            
+
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

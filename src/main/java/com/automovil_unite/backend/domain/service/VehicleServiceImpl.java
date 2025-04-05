@@ -18,7 +18,7 @@ public class VehicleServiceImpl implements VehicleService {
     
     private final VehicleRepository vehicleRepository;
     private final DomainEventPublisher eventPublisher;
-    
+
     public VehicleServiceImpl(VehicleRepository vehicleRepository, DomainEventPublisher eventPublisher) {
         this.vehicleRepository = vehicleRepository;
         this.eventPublisher = eventPublisher;
@@ -33,13 +33,11 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setRentCount(0);
         vehicle.setAvailable(true);
         vehicle.setVerified(false); // Requiere verificación administrativa
-        
-        Vehicle savedVehicle = vehicleRepository.save(vehicle);
-        
+
         // Aquí se publicaría un evento de dominio
         // eventPublisher.publish(new VehicleRegisteredEvent(savedVehicle));
         
-        return savedVehicle;
+        return vehicleRepository.save(vehicle);
     }
 
     @Override
